@@ -46,9 +46,8 @@ Table Manager empowers you to create dynamic and customizable tables while provi
 To get started with Table Manager, follow these steps:
 
 1. Database Configuration: First, navigate to the settings.py file in your Django project and edit the DATABASES section. Configure your database connection by specifying your username, password, and the desired database name. Alternatively, you can use SQLite as your database.
-
    
-python
+```python
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -56,32 +55,35 @@ python
         },
         # Add other database configurations if needed
     }
-    
+```
 
 2. Database Setup: Create the database specified in your settings. If you're using SQLite, Django will automatically create the database file for you.
 
 3. Django Installation: If you haven't already installed Django, you can do so using pipenv. Run the following commands within your project directory:
 
-   
-bash
-    pipenv install django
-    pipenv shell
-    
 
+```bash
+   pipenv install django
+   pipenv shell
+```
+
+ 
 4. Interpreter Configuration: Ensure that your IDE or code editor is configured to use the Python interpreter provided by pipenv.
 
 5. Database Migration: Apply initial migrations to set up the database schema:
 
-   
-bash
-    python manage.py migrate
-    
+
+```bash
+   python manage.py migrate
+```  
+
 
 6. Run the Development Server: Start the Django development server:
 
    
-bash
+```bash
     python manage.py runserver
+```
     
 
 Your Table Manager Django project is now up and running. You can access it by navigating to http://localhost:8000/ in your web browser. Explore the user registration, login, and table management features to begin using Table Manager in your project.
@@ -94,20 +96,18 @@ To create a table using TableView, follow these steps by coding it like the exam
 
 1. Import the Required Classes: Import the TableView class and any other necessary modules in your Django views:
 
-   
-python
-    from django.contrib.auth.decorators import login_required
-    from django.utils.decorators import method_decorator
-    from datatableview.views import DatatableView
-    from datatableview import Datatable, columns
-    from .ExportReserves import ExportReserves
-    #import your model
+```python
+   from django.contrib.auth.decorators import login_required
+   from django.utils.decorators import method_decorator
+   from datatableview.views import DatatableView
+   from datatableview import Datatable, columns
+   from .ExportReserves import ExportReserves
+   #import your model
+```
 
 2. Create a TableView Class: Define a new class for your table view, inheriting from DatatableView, ExportReserves. Customize the class by specifying the model, queryset, template name, translation (column labels), and output file name:
 
-   
-python
-
+```python
   @method_decorator(login_required(login_url="/login"), name="dispatch")
   class Tableview(DatatableView, ExportReserves):
       # login_url = "/login"
@@ -122,17 +122,19 @@ python
           'توضیحات': 'collection__description'
       }
       filename = 'export_products.csv'
-    
+``` 
 
 3. Customize Numerical Fields: If needed, you can customize the display of numerical fields by overriding the get_numerical_fields method within your CustomTableView class:
 
    
-python
+```python
     def get_numerical_fields(self):
         # Customize numerical fields here
+```
     
 4.pass context:
-python
+
+```python
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["table_name"] = 'name'
@@ -140,14 +142,15 @@ python
         context["datatableview_options"] = self.datatable_class._meta
         context["numeric_fields"] = self.get_numerical_fields()
         return context
+```
 
 5. Pagination Configuration: You can specify pagination options within your CustomTableView class by setting the paginate_by attribute:
 
-   
-python
+```python
     class datatable_class(Datatable):
         class Meta:
             page_length = 5
+```
 
 Now, you can use the CustomTableView class in your Django views to create and display your customized table. This approach allows you to code your table similar to the TableView example, with the flexibility to customize it further to meet your project's specific requirements.
 
@@ -162,9 +165,11 @@ To configure and customize data-table-view for your Django project, follow these
 2. Numerical Fields Customization:
    - If you need to customize the display of numerical fields, override the get_numerical_fields method within your TableView class.
      
-python
+```python
    def get_numerical_fields(self):
        # Customize numerical fields here
+
+```
 
 3.context
   -pass the context data , as shown in the "Usage" section above.
@@ -173,15 +178,15 @@ python
    - Set the pagination options by adjusting the paginate_by attribute within your TableView class:
 
   
-python
+```python
    page_length = 10  # Modify the number of items per page as needed
-   
+```   
 
 5. Database Configuration:
    - In your project's settings.py, configure the database connection in the DATABASES section. You can use the provided SQLite configuration or specify your database settings as required.
 
   
-python
+```python
    DATABASES = {
        'default': {
            'ENGINE': 'django.db.backends.sqlite3',
@@ -189,7 +194,7 @@ python
        },
        # Add other database configurations if needed
    }
-   
+```
 
 6. User Authentication and Email Activation:
    - Ensure that user registration, login, and password reset functionality are set up according to your project's needs.
@@ -198,7 +203,7 @@ python
 By following these configuration steps, you can tailor data-table-view to match your project's specific requirements and make it a valuable addition to your Django-based data management and visualization toolkit.
 ## Examples
 
-python
+```python
   from django.contrib.auth.decorators import login_required
   from django.utils.decorators import method_decorator
   from datatableview.views import DatatableView
@@ -250,3 +255,5 @@ python
                   "unit_price": 'قیمت',
               }
               
+
+```
