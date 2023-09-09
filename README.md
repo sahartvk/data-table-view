@@ -10,8 +10,6 @@ data-table-view is a Django-based web application that simplifies the creation a
 4. [Usage](#usage)
 5. [Configuration](#configuration)
 6. [Examples](#examples)
-7. [Contributing](#contributing)
-8. [License](#license)
 
 ## Introduction
 
