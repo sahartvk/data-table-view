@@ -64,6 +64,7 @@ To get started with Table Manager, follow these steps:
 
 ```bash
    pipenv install django
+   ...
    pipenv shell
 ```
 
@@ -99,29 +100,22 @@ To create a table using TableView, follow these steps by coding it like the exam
 ```python
    from django.contrib.auth.decorators import login_required
    from django.utils.decorators import method_decorator
-   from datatableview.views import DatatableView
-   from datatableview import Datatable, columns
-   from .ExportReserves import ExportReserves
    #import your model
+   from .tableview import TableView
+   from datatableview import Datatable, columns
 ```
 
-2. Create a TableView Class: Define a new class for your table view, inheriting from DatatableView, ExportReserves. Customize the class by specifying the model, queryset, template name, translation (column labels), and output file name:
+2. Create a TableView Class: Define a new class for your table view, inheriting from TableView. Customize the class by specifying the model, queryset, template name, translation (column labels), and output file name:
 
 ```python
-  @method_decorator(login_required(login_url="/login"), name="dispatch")
-  class Tableview(DatatableView, ExportReserves):
-      # login_url = "/login"
-      model = YourModel
-      queryset = YourModel.objects.select_related('RelatedModel').order_by('id')
-      template_name = 'store/index.html'
-      translation = {
-          'کد محصول': 'id',
-          'نام': 'title',
-          'قیمت': 'unit_price',
-          'کالکشن': 'collection__title',
-          'توضیحات': 'collection__description'
-      }
-      filename = 'export_products.csv'
+@method_decorator(login_required(login_url="/login"), name="dispatch")
+class ProductView(TableView):
+    model = YourModel
+    queryset = YourModel.objects.select_related('RelatedModel').order_by('id')
+    template_name = 'store/index.html'
+    translation = {'label': 'field_name'}
+    filename = 'export_products.csv'
+
 ``` 
 
 3. Customize Numerical Fields: If needed, you can customize the display of numerical fields by overriding the get_numerical_fields method within your CustomTableView class:
@@ -135,12 +129,9 @@ To create a table using TableView, follow these steps by coding it like the exam
 4.pass context:
 
 ```python
-    def get_context_data(self, **kwargs):
+     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["table_name"] = 'name'
-        # context["login_url"] = self.login_url
-        context["datatableview_options"] = self.datatable_class._meta
-        context["numeric_fields"] = self.get_numerical_fields()
+        context["table_name"] = 'YourTableName'
         return context
 ```
 
@@ -159,7 +150,7 @@ Now, you can use the CustomTableView class in your Django views to create and di
 To configure and customize data-table-view for your Django project, follow these steps:
 
 1. Table Configuration:
-   - Configure your tables using the TableView class or by inheriting from it, as shown in the "Usage" section above.
+   - Configure your tables using the TableView class by inheriting from it, as shown in the "Usage" section above.
    - Define the model, queryset, template name, translation (column labels), and output file name.
 
 2. Numerical Fields Customization:
@@ -205,55 +196,48 @@ By following these configuration steps, you can tailor data-table-view to match 
 
 ```python
   from django.contrib.auth.decorators import login_required
-  from django.utils.decorators import method_decorator
-  from datatableview.views import DatatableView
-  from .models import Product
-  from datatableview import Datatable, columns
-  from .ExportReserves import ExportReserves
-  
-  
-  # Create your views here.
-  
-  @method_decorator(login_required(login_url="/login"), name="dispatch")
-  class Tableview(DatatableView, ExportReserves):
-      # login_url = "/login"
-      model = Product
-      queryset = Product.objects.select_related('collection').order_by('id')
-      template_name = 'store/index.html'
-      translation = {
-          'کد محصول': 'id',
-          'نام': 'title',
-          'قیمت': 'unit_price',
-          'کالکشن': 'collection__title',
-          'توضیحات': 'collection__description'
-      }
-      filename = 'export_products.csv'
-  
-      def get_numerical_fields(self):
-          return ["unit_price"]
-  
-      def get_context_data(self, **kwargs):
-          context = super().get_context_data(**kwargs)
-          context["table_name"] = 'products'
-          # context["login_url"] = self.login_url
-          context["datatableview_options"] = self.datatable_class._meta
-          context["numeric_fields"] = self.get_numerical_fields()
-          return context
-  
-      class datatable_class(Datatable):
-          collection_title = columns.TextColumn('کالکشن', sources=['collection__title'])
-          collection_description = columns.TextColumn('توضیحات', sources=['collection__description'])
-  
-          class Meta:
-              model = Product
-              ordering = ["id"]
-              page_length = 5
-              columns = ["id", "title", "unit_price", "collection_title", "collection_description"]
-              labels = {
-                  "id": 'کد محصول',
-                  "title": "نام",
-                  "unit_price": 'قیمت',
-              }
-              
+from django.utils.decorators import method_decorator
+from .models import Product
+from .tableview import TableView
+from datatableview import Datatable, columns
+
+# Create your views here.
+
+@method_decorator(login_required(login_url="/login"), name="dispatch")
+class ProductView(TableView):
+    model = Product
+    queryset = Product.objects.select_related('collection').order_by('id')
+    template_name = 'store/index.html'
+    translation = {
+        'کد محصول': 'id',
+        'نام': 'title',
+        'قیمت': 'unit_price',
+        'کالکشن': 'collection__title',
+        'توضیحات': 'collection__description'
+    }
+    filename = 'export_products.csv'
+
+    def get_numerical_fields(self):
+        return ["unit_price"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["table_name"] = 'products'
+        return context
+
+    class datatable_class(Datatable):
+        collection_title = columns.TextColumn('کالکشن', sources=['collection__title'])
+        collection_description = columns.TextColumn('توضیحات', sources=['collection__description'])
+
+        class Meta:
+            model = Product
+            ordering = ["id"]
+            page_length = 5
+            columns = ["id", "title", "unit_price", "collection_title", "collection_description"]
+            labels = {
+                "id": 'کد محصول',
+                "title": "نام",
+                "unit_price": 'قیمت',
+            }              
 
 ```
