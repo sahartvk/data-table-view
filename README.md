@@ -26,7 +26,24 @@ data-table-view-fa offers a comprehensive set of features to help you effectivel
 
 - Pagination Control: Have control over pagination settings within tables, ensuring efficient navigation of large datasets.
 
-Table Manager empowers you to create dynamic and customizable tables while providing essential user management and data export capabilities, making it a valuable addition to your Django projects.
+- Filter by Column: One of the key features of DataTable View is the ability to filter data based on each column. A filter menu is displayed, When you click the "Apply Filter" button, the filter is applied to the table, indicating that filtering is active. 
+
+-Additionally, the search box for the entire table and specifying the number of entries per page are also included.
+However, if you wish to customize the styling, please refer to static/css/styles.css and comment the following lines to modify or hide them:
+
+```css
+/* comment and modify as needed
+.dataTables_filter {
+    /* Your custom styling here */
+}
+
+.dataTables_length {
+    /* Your custom styling here */
+}
+*/
+```
+
+data-table-view-fa empowers you to create dynamic and customizable tables while providing essential user management and data export capabilities, making it a valuable addition to your Django projects.
 
 ## Installation
 
