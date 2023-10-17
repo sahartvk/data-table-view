@@ -109,7 +109,7 @@ To create a table using TableView, follow these steps by coding it like the exam
 class ProductView(TableView):
     model = YourModel
     queryset = YourModel.objects.select_related('RelatedModel').order_by('id')
-    template_name = 'store/index.html'
+    template_name = 'datatableview/index.html'
     translation = {'label': 'field_name'}
     filename = 'export_products.csv'
 
@@ -157,7 +157,7 @@ from datatableview import Datatable, columns
 class ProductView(TableView):
     model = Product
     queryset = Product.objects.select_related('collection').order_by('id')
-    template_name = 'store/index.html'
+    template_name = 'datatableview/index.html'
     translation = {
         'کد محصول': 'id',
         'نام': 'title',
