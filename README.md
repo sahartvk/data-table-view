@@ -142,7 +142,31 @@ class ProductView(TableView):
 
 Now, you can use the CustomTableView class in your Django views to create and display your customized table. This approach allows you to code your table similar to the TableView example, with the flexibility to customize it further to meet your project's specific requirements.
 
+6.structure
+
+```bash
+
+└── YourProject
+    ├── static
+    │   ├── css
+    |   ├── DataTables
+    |   ├── fonts
+    │   └── js
+    └── YourApp
+        └── templates/datatableview
+        |    ├── index.html
+        |    └── template.html
+        ├── ExportReserves.py
+        ├── tableview.py
+        ├── ...
+        └── views.py
+
+```
+
+
 ## Examples
+
+views.py:
 
 ```python
 from django.contrib.auth.decorators import login_required
